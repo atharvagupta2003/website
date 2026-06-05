@@ -1,0 +1,1880 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coupld. One Matchmaker. Zero Swiping. Real Connection.</title>
+  <meta name="description" content="For people who are done with swiping. Five curated matches. A personal matchmaker from first conversation to first date.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ======================
+       RESET & TOKENS
+    ====================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --purple:    #7C3AED;
+      --purple-l:  #A78BFA;
+      --blue:      #4F46E5;
+      --blue-l:    #818CF8;
+      --grad:      linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+      --grad-text: linear-gradient(135deg, #818CF8 0%, #C084FC 100%);
+      --bg:        #06060E;
+      --bg-s:      #0C0C1A;
+      --bg-c:      #101021;
+      --txt:       #FFFFFF;
+      --txt-m:     rgba(255,255,255,0.55);
+      --txt-f:     rgba(255,255,255,0.28);
+      --border:    rgba(255,255,255,0.07);
+      --border-s:  rgba(255,255,255,0.13);
+      --glass:     rgba(255,255,255,0.03);
+      --glass-s:   rgba(255,255,255,0.06);
+      --glow:      rgba(124,58,237,0.35);
+      --f-d:       'Bricolage Grotesque', system-ui, sans-serif;
+      --f-b:       'Inter', system-ui, sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--txt);
+      font-family: var(--f-b);
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    img { max-width: 100%; height: auto; display: block; }
+    a { text-decoration: none; color: inherit; }
+    button { font-family: inherit; cursor: pointer; border: none; }
+
+    /* ======================
+       LAYOUT
+    ====================== */
+    .container {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 28px;
+    }
+
+    .g-text {
+      background: var(--grad-text);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .glass {
+      background: var(--glass);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--border);
+    }
+    .glass-s {
+      background: var(--glass-s);
+      backdrop-filter: blur(40px);
+      -webkit-backdrop-filter: blur(40px);
+      border: 1px solid var(--border-s);
+    }
+
+    /* ======================
+       REVEAL
+    ====================== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.75s ease, transform 0.75s ease;
+    }
+    .reveal.in { opacity: 1; transform: translateY(0); }
+    .d1 { transition-delay: 0.1s; }
+    .d2 { transition-delay: 0.2s; }
+    .d3 { transition-delay: 0.3s; }
+    .d4 { transition-delay: 0.4s; }
+
+    /* ======================
+       NAVBAR
+    ====================== */
+    .nav {
+      position: fixed;
+      inset: 0 0 auto;
+      z-index: 999;
+      padding: 22px 0;
+      transition: padding .4s, background .4s, border-color .4s;
+      border-bottom: 1px solid transparent;
+    }
+    .nav.stuck {
+      padding: 12px 0;
+      background: rgba(6,6,14,0.88);
+      backdrop-filter: blur(48px);
+      -webkit-backdrop-filter: blur(48px);
+      border-bottom-color: var(--border);
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    .nav-logo img { height: 28px; width: auto; object-fit: contain; }
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.875rem;
+      color: var(--txt-m);
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--txt); }
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--grad);
+      color: #fff;
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 9px 20px;
+      border-radius: 100px;
+      white-space: nowrap;
+      box-shadow: 0 4px 20px var(--glow);
+      transition: transform .2s, box-shadow .2s;
+      flex-shrink: 0;
+    }
+    .nav-cta:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 32px var(--glow);
+    }
+    .live-dot {
+      width: 7px; height: 7px;
+      background: #fff;
+      border-radius: 50%;
+      opacity: .75;
+      animation: blink 2s ease-in-out infinite;
+    }
+    @keyframes blink {
+      0%,100% { opacity:.75; transform:scale(1); }
+      50%      { opacity:1;   transform:scale(1.4); }
+    }
+
+    /* ======================
+       HERO
+    ====================== */
+    .hero {
+      position: relative;
+      height: 100svh;
+      min-height: 680px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .hero-parallax {
+      position: absolute;
+      inset: 0;
+      will-change: transform;
+    }
+    .hero-parallax img {
+      width: 100%;
+      height: 115%;
+      object-fit: cover;
+      object-position: center 15%;
+      filter: grayscale(100%) brightness(.38);
+    }
+    .hero-fog {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to bottom,
+          rgba(6,6,14,.45) 0%,
+          rgba(6,6,14,.1) 35%,
+          rgba(6,6,14,.6) 72%,
+          rgba(6,6,14,1) 100%);
+    }
+    .hero-glow {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 55%, rgba(79,70,229,.14) 0%, transparent 70%);
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      max-width: 860px;
+      padding: 80px 28px 0;
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(124,58,237,.13);
+      border: 1px solid rgba(124,58,237,.3);
+      border-radius: 100px;
+      padding: 6px 16px;
+      font-size: .78rem;
+      font-weight: 600;
+      color: var(--purple-l);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      margin-bottom: 28px;
+    }
+    .eyebrow .dot {
+      width: 6px; height: 6px;
+      background: var(--purple-l);
+      border-radius: 50%;
+      animation: blink 2s ease-in-out infinite;
+    }
+    .hero-h1 {
+      font-family: var(--f-d);
+      font-size: clamp(2.9rem, 7.5vw, 6rem);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -.035em;
+      color: #fff;
+      margin-bottom: 22px;
+    }
+    .hero-h1 em {
+      font-style: normal;
+      background: var(--grad-text);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-sub {
+      font-size: clamp(.95rem, 2vw, 1.15rem);
+      color: rgba(255,255,255,.62);
+      max-width: 480px;
+      margin: 0 auto 34px;
+      line-height: 1.7;
+    }
+    .hero-btns {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 44px;
+    }
+    .btn-p {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--grad);
+      color: #fff;
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 14px 28px;
+      border-radius: 100px;
+      box-shadow: 0 6px 28px var(--glow);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .btn-p:hover { transform: translateY(-2px); box-shadow: 0 12px 40px var(--glow); }
+    .btn-g {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--glass-s);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      color: #fff;
+      font-weight: 500;
+      font-size: 1rem;
+      padding: 14px 28px;
+      border-radius: 100px;
+      border: 1px solid var(--border-s);
+      transition: border-color .2s, background .2s;
+    }
+    .btn-g:hover { border-color: rgba(124,58,237,.4); background: rgba(124,58,237,.08); }
+    .hero-stats {
+      display: inline-flex;
+      align-items: center;
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border-s);
+      border-radius: 18px;
+      padding: 18px 32px;
+      gap: 32px;
+    }
+    .hstat { text-align: center; }
+    .hstat-num {
+      font-family: var(--f-d);
+      font-size: 2rem;
+      font-weight: 800;
+      line-height: 1;
+      color: #fff;
+    }
+    .hstat-num.g {
+      background: var(--grad-text);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hstat-label {
+      font-size: .68rem;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      color: var(--txt-m);
+      margin-top: 5px;
+    }
+    .hstat-div { width: 1px; height: 40px; background: var(--border-s); }
+    .scroll-hint {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    .scroll-hint span {
+      font-size: .65rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.25);
+    }
+    .scroll-mouse {
+      width: 20px; height: 32px;
+      border: 1.5px solid rgba(255,255,255,.2);
+      border-radius: 10px;
+      display: flex;
+      justify-content: center;
+      padding-top: 5px;
+    }
+    .scroll-pip {
+      width: 2.5px; height: 6px;
+      background: rgba(255,255,255,.4);
+      border-radius: 2px;
+      animation: pip 1.7s ease-in-out infinite;
+    }
+    @keyframes pip {
+      0%,100% { transform:translateY(0); opacity:1; }
+      55%      { transform:translateY(9px); opacity:.2; }
+    }
+    .h-ani { opacity:0; animation: hfade .7s ease forwards; }
+    .h-ani:nth-child(1) { animation-delay:.15s; }
+    .h-ani:nth-child(2) { animation-delay:.35s; }
+    .h-ani:nth-child(3) { animation-delay:.5s; }
+    .h-ani:nth-child(4) { animation-delay:.65s; }
+    .h-ani:nth-child(5) { animation-delay:.8s; }
+    @keyframes hfade {
+      from { opacity:0; transform:translateY(22px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+
+    /* ======================
+       SCARCITY STRIP
+    ====================== */
+    .sstrip {
+      background: linear-gradient(135deg, rgba(79,70,229,.1), rgba(124,58,237,.1));
+      border-top: 1px solid rgba(124,58,237,.18);
+      border-bottom: 1px solid rgba(124,58,237,.18);
+      padding: 18px 0;
+    }
+    .sstrip-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .sstrip-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .sbadge {
+      background: var(--grad);
+      color: #fff;
+      font-size: .72rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 100px;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+    .sstrip-text { font-size: .88rem; color: rgba(255,255,255,.75); }
+    .sstrip-text strong { color: #fff; font-weight: 600; }
+    .spbar-wrap { flex: 1; min-width: 180px; max-width: 280px; }
+    .spbar-top {
+      display: flex;
+      justify-content: space-between;
+      font-size: .72rem;
+      color: var(--txt-m);
+      margin-bottom: 6px;
+    }
+    .spbar-top strong { color: var(--purple-l); }
+    .spbar-bg { height: 5px; background: rgba(255,255,255,.07); border-radius: 3px; overflow: hidden; }
+    .spbar-fill {
+      height: 100%;
+      background: var(--grad);
+      border-radius: 3px;
+      width: 0;
+      transition: width 1.8s cubic-bezier(.22,1,.36,1);
+    }
+
+    /* ======================
+       SECTION COMMONS
+    ====================== */
+    .sec { padding: 100px 0; }
+    .sec-eyebrow {
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--purple-l);
+      display: block;
+      margin-bottom: 14px;
+    }
+    .sec-h {
+      font-family: var(--f-d);
+      font-size: clamp(1.9rem, 4.5vw, 3.2rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -.025em;
+      color: #fff;
+      margin-bottom: 16px;
+    }
+    .sec-h em {
+      font-style: normal;
+      background: var(--grad-text);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .sec-sub {
+      font-size: 1.02rem;
+      color: var(--txt-m);
+      line-height: 1.7;
+      max-width: 580px;
+    }
+
+    /* ======================
+       PROBLEM
+    ====================== */
+    .problem { padding: 0; overflow: hidden; }
+    .problem-wrap {
+      position: relative;
+      min-height: 680px;
+      display: flex;
+      align-items: center;
+    }
+    .problem-img-wrap { position: absolute; inset: 0; overflow: hidden; }
+    .problem-img {
+      position: absolute;
+      top: -12%; left: 0; right: 0;
+      height: 130%;
+      will-change: transform;
+    }
+    .problem-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(100%) brightness(.22);
+    }
+    .problem-fog {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(100deg, rgba(6,6,14,.97) 38%, rgba(6,6,14,.35) 75%, rgba(6,6,14,.1) 100%);
+    }
+    .problem-content { position: relative; z-index: 2; padding: 80px 0; }
+    .problem-big {
+      font-family: var(--f-d);
+      font-size: clamp(3.5rem, 8vw, 6rem);
+      font-weight: 800;
+      line-height: .95;
+      background: var(--grad-text);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 6px;
+    }
+    .problem-big-label { font-size: .95rem; color: rgba(255,255,255,.6); }
+    .problem-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 11px;
+      margin-top: 28px;
+      max-width: 510px;
+    }
+    .pcard {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      background: rgba(255,255,255,.03);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,.07);
+      border-radius: 14px;
+      padding: 16px 18px;
+      transition: border-color .3s, background .3s;
+    }
+    .pcard:hover { border-color: rgba(124,58,237,.25); background: rgba(124,58,237,.05); }
+    .pcard-n {
+      min-width: 34px; height: 34px;
+      background: var(--grad);
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--f-d);
+      font-size: .8rem;
+      font-weight: 800;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .pcard-title { font-weight: 600; font-size: .875rem; color: #fff; margin-bottom: 3px; }
+    .pcard-text  { font-size: .78rem; color: var(--txt-m); line-height: 1.55; }
+
+    /* ======================
+       FEATURES
+    ====================== */
+    .features { background: var(--bg-s); }
+    .features-hd { text-align: center; margin-bottom: 60px; }
+    .features-hd .sec-sub { margin: 0 auto; }
+    .feat-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+    @media(max-width:900px) { .feat-grid { grid-template-columns: repeat(2,1fr); } }
+    @media(max-width:560px) { .feat-grid { grid-template-columns: 1fr; } }
+    .fcard {
+      background: var(--bg-c);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 26px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color .3s, transform .3s;
+    }
+    .fcard::after {
+      content:'';
+      position:absolute;
+      top:0; left:0; right:0;
+      height:1px;
+      background: var(--grad);
+      opacity:0;
+      transition:opacity .3s;
+    }
+    .fcard:hover { border-color: rgba(124,58,237,.3); transform: translateY(-4px); }
+    .fcard:hover::after { opacity:1; }
+    .fcard-num {
+      width: 38px; height: 38px;
+      background: linear-gradient(135deg, rgba(79,70,229,.2), rgba(124,58,237,.2));
+      border: 1px solid rgba(124,58,237,.2);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--f-d);
+      font-size: .78rem;
+      font-weight: 800;
+      color: var(--purple-l);
+      margin-bottom: 18px;
+      letter-spacing: .02em;
+    }
+    .fcard-title { font-family: var(--f-d); font-size: 1rem; font-weight: 700; color: #fff; margin-bottom: 9px; }
+    .fcard-text  { font-size: .85rem; color: var(--txt-m); line-height: 1.65; }
+
+    /* ======================
+       MARQUEE
+    ====================== */
+    .marquee-sec {
+      padding: 36px 0;
+      overflow: hidden;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .mq-track {
+      display: flex;
+      gap: 44px;
+      width: max-content;
+      animation: mq 32s linear infinite;
+    }
+    .mq-item {
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--f-d);
+      font-size: 1rem;
+      font-weight: 600;
+      color: rgba(255,255,255,.2);
+    }
+    .mq-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--grad);
+      flex-shrink: 0;
+    }
+    @keyframes mq { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+    /* ======================
+       HOW IT WORKS
+    ====================== */
+    .how-hd { text-align: center; margin-bottom: 70px; }
+    .how-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+    }
+    @media(max-width:768px) { .how-grid { grid-template-columns: repeat(2,1fr); } }
+    @media(max-width:480px) { .how-grid { grid-template-columns: 1fr; } }
+    .hstep {
+      position: relative;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: var(--bg-c);
+      transition: border-color .3s, transform .3s;
+    }
+    .hstep:hover { border-color: rgba(124,58,237,.3); transform: translateY(-4px); }
+    .hstep-img { width: 100%; height: 220px; overflow: hidden; position: relative; }
+    .hstep-img img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      filter: grayscale(70%) brightness(.7);
+      transition: filter .5s, transform .5s;
+    }
+    .hstep:hover .hstep-img img { filter: grayscale(0%) brightness(.85); transform: scale(1.04); }
+    .hstep-num {
+      position: absolute;
+      top: 16px; left: 16px;
+      width: 40px; height: 40px;
+      background: var(--grad);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--f-d);
+      font-size: .9rem;
+      font-weight: 800;
+      color: #fff;
+      z-index: 2;
+      box-shadow: 0 4px 16px var(--glow);
+    }
+    .hstep-body { padding: 20px 22px 22px; }
+    .hstep-title { font-family: var(--f-d); font-size: 1rem; font-weight: 700; color: #fff; margin-bottom: 7px; }
+    .hstep-text  { font-size: .82rem; color: var(--txt-m); line-height: 1.6; }
+
+    /* ======================
+       MATCHMAKER
+    ====================== */
+    .mm { background: var(--bg-s); position: relative; overflow: hidden; }
+    .mm::before {
+      content:'';
+      position:absolute;
+      width:700px; height:700px;
+      border-radius:50%;
+      background: radial-gradient(circle, rgba(124,58,237,.09) 0%, transparent 70%);
+      right:-220px; top:50%;
+      transform:translateY(-50%);
+      pointer-events:none;
+    }
+    .mm-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 72px;
+      align-items: center;
+    }
+    @media(max-width:800px) { .mm-inner { grid-template-columns:1fr; gap:44px; } }
+    .mm-left .sec-sub { margin-bottom: 28px; }
+    .mm-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 13px;
+    }
+    .mm-card {
+      background: var(--bg-c);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px 20px;
+      transition: border-color .3s;
+    }
+    .mm-card:hover { border-color: rgba(124,58,237,.3); }
+    .mm-card-num {
+      font-family: var(--f-d);
+      font-size: .7rem;
+      font-weight: 800;
+      color: var(--purple-l);
+      letter-spacing: .06em;
+      margin-bottom: 10px;
+    }
+    .mm-card-title { font-family: var(--f-d); font-weight: 700; font-size: .88rem; color: #fff; margin-bottom: 5px; }
+    .mm-card-text  { font-size: .76rem; color: var(--txt-m); line-height: 1.55; }
+
+    /* ======================
+       PHOTO BREAK
+    ====================== */
+    .photo-break { position: relative; height: 480px; overflow: hidden; }
+    .pb-img {
+      position: absolute;
+      inset: -15% 0;
+      will-change: transform;
+    }
+    .pb-img img {
+      width: 100%; height: 130%;
+      object-fit: cover;
+      filter: grayscale(100%) brightness(.3);
+    }
+    .pb-fog {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom,
+        rgba(6,6,14,1) 0%,
+        rgba(6,6,14,.1) 25%,
+        rgba(6,6,14,.1) 75%,
+        rgba(6,6,14,1) 100%);
+    }
+    .pb-content {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    .pb-quote { max-width: 700px; padding: 0 28px; }
+    .pb-quote p {
+      font-family: var(--f-d);
+      font-size: clamp(1.5rem, 3.5vw, 2.4rem);
+      font-weight: 700;
+      line-height: 1.25;
+      color: #fff;
+      letter-spacing: -.02em;
+    }
+    .pb-quote p em {
+      font-style: normal;
+      background: var(--grad-text);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ======================
+       WAITLIST
+    ====================== */
+    .waitlist { background: var(--bg-s); position: relative; overflow: hidden; }
+    .waitlist::before {
+      content:'';
+      position:absolute;
+      width:900px; height:900px;
+      border-radius:50%;
+      background: radial-gradient(circle, rgba(79,70,229,.07) 0%, transparent 70%);
+      left:50%; top:50%;
+      transform:translate(-50%,-50%);
+      pointer-events:none;
+    }
+    .wl-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 580px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .wl-inner .sec-h { margin-bottom: 12px; }
+    .wl-inner .sec-sub { margin: 0 auto 40px; }
+    .wl-box {
+      background: var(--bg-c);
+      border: 1px solid rgba(124,58,237,.22);
+      border-radius: 22px;
+      padding: 28px 32px;
+      margin-bottom: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+    .wl-box::before {
+      content:'';
+      position:absolute;
+      top:0; left:0; right:0;
+      height:2px;
+      background: var(--grad);
+    }
+    .wl-box-label {
+      font-size: .72rem;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--txt-m);
+      margin-bottom: 10px;
+    }
+    .wl-num {
+      font-family: var(--f-d);
+      font-size: 4.5rem;
+      font-weight: 800;
+      background: var(--grad-text);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+      margin-bottom: 10px;
+    }
+    .wl-num.tick { animation: ctick .28s ease; }
+    @keyframes ctick {
+      0% { transform:translateY(-10px); opacity:0; }
+      100% { transform:translateY(0); opacity:1; }
+    }
+    .wl-sub-label { font-size: .85rem; color: var(--txt-m); }
+    .wl-sub-label strong { color: #fff; }
+    .wl-prog { margin-top: 18px; }
+    .wl-prog-bar { height: 4px; background: rgba(255,255,255,.06); border-radius: 2px; overflow: hidden; }
+    .wl-prog-fill {
+      height: 100%;
+      background: var(--grad);
+      border-radius: 2px;
+      width: 0;
+      transition: width 2s cubic-bezier(.22,1,.36,1);
+    }
+    .wl-form {
+      display: flex;
+      gap: 10px;
+      max-width: 480px;
+      margin: 0 auto 14px;
+    }
+    .wl-input {
+      flex: 1;
+      background: var(--bg-c);
+      border: 1px solid var(--border-s);
+      border-radius: 100px;
+      padding: 13px 22px;
+      font-family: var(--f-b);
+      font-size: .95rem;
+      color: #fff;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .wl-input::placeholder { color: rgba(255,255,255,.28); }
+    .wl-input:focus {
+      border-color: rgba(124,58,237,.5);
+      box-shadow: 0 0 0 3px rgba(124,58,237,.1);
+    }
+    .wl-btn {
+      background: var(--grad);
+      color: #fff;
+      font-weight: 600;
+      font-size: .95rem;
+      padding: 13px 22px;
+      border-radius: 100px;
+      white-space: nowrap;
+      box-shadow: 0 4px 18px var(--glow);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .wl-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 28px var(--glow); }
+    .wl-note { font-size: .76rem; color: var(--txt-f); }
+    .wl-success {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 0;
+    }
+    .wl-success.show { display: flex; }
+    .wl-success-ico {
+      width: 56px; height: 56px;
+      background: linear-gradient(135deg, rgba(79,70,229,.2), rgba(124,58,237,.2));
+      border: 1px solid rgba(124,58,237,.3);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .wl-success-ico svg { width: 24px; height: 24px; }
+    .wl-success-title { font-family: var(--f-d); font-size: 1.4rem; font-weight: 700; color: #fff; }
+    .wl-success-txt { font-size: .88rem; color: var(--txt-m); }
+
+    /* ======================
+       FOOTER
+    ====================== */
+    .footer { padding: 64px 0 40px; border-top: 1px solid var(--border); }
+    .footer-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 48px;
+      margin-bottom: 52px;
+      flex-wrap: wrap;
+    }
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .footer-logo img { height: 24px; width: auto; object-fit: contain; }
+    .footer-tagline { font-size: .82rem; color: var(--txt-m); max-width: 240px; line-height: 1.65; margin-top: 12px; }
+    .footer-col h4 {
+      font-size: .72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--txt-m);
+      margin-bottom: 14px;
+    }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+    .footer-col a { font-size: .85rem; color: rgba(255,255,255,.4); transition: color .2s; }
+    .footer-col a:hover { color: #fff; }
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 28px;
+      border-top: 1px solid var(--border);
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .footer-copy { font-size: .78rem; color: rgba(255,255,255,.22); }
+    .footer-legal { display: flex; gap: 20px; }
+    .footer-legal a { font-size: .78rem; color: rgba(255,255,255,.22); transition: color .2s; }
+    .footer-legal a:hover { color: rgba(255,255,255,.55); }
+
+    /* ======================
+       CITIES
+    ====================== */
+    .cities { background: var(--bg); position: relative; overflow: hidden; padding: 100px 0; }
+
+    /* subtle animated dot grid background */
+    .cities-bg {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background-image: radial-gradient(circle, rgba(255,255,255,.06) 1px, transparent 1px);
+      background-size: 44px 44px;
+      mask-image: radial-gradient(ellipse 80% 100% at 50% 50%, black 40%, transparent 100%);
+      -webkit-mask-image: radial-gradient(ellipse 80% 100% at 50% 50%, black 40%, transparent 100%);
+    }
+    .cities-glow-l {
+      position: absolute;
+      width: 500px; height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(124,58,237,.12) 0%, transparent 70%);
+      top: 50%; left: -100px;
+      transform: translateY(-50%);
+      pointer-events: none;
+    }
+    .cities-glow-r {
+      position: absolute;
+      width: 400px; height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(79,70,229,.1) 0%, transparent 70%);
+      top: 30%; right: -80px;
+      pointer-events: none;
+    }
+
+    .cities-header { text-align: center; margin-bottom: 72px; position: relative; z-index: 1; }
+    .cities-header .sec-sub { margin: 0 auto; }
+
+    .cities-split {
+      display: grid;
+      grid-template-columns: 1fr 1px 1fr;
+      gap: 0;
+      position: relative;
+      z-index: 1;
+      align-items: start;
+    }
+    @media(max-width:768px) {
+      .cities-split { grid-template-columns: 1fr; }
+      .cities-divider { display: none; }
+    }
+
+    .cities-divider {
+      width: 1px;
+      align-self: stretch;
+      background: linear-gradient(to bottom, transparent, rgba(255,255,255,.1) 20%, rgba(255,255,255,.1) 80%, transparent);
+    }
+
+    /* LEFT — active cities */
+    .cities-active { padding: 0 48px 0 0; }
+    @media(max-width:768px) { .cities-active { padding: 0 0 48px 0; } }
+
+    .cities-status-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: .72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      margin-bottom: 36px;
+    }
+    .cities-status-label.live { color: #A78BFA; }
+    .cities-status-label.soon { color: rgba(255,255,255,.35); }
+
+    .pulse-wrap {
+      position: relative;
+      width: 10px; height: 10px;
+      flex-shrink: 0;
+    }
+    .pulse-core {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: var(--purple-l);
+    }
+    .pulse-ring {
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      border: 1.5px solid var(--purple-l);
+      animation: pulse-ring 2s ease-out infinite;
+    }
+    .pulse-ring-2 {
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      border: 1.5px solid var(--purple-l);
+      animation: pulse-ring 2s ease-out 0.7s infinite;
+    }
+    @keyframes pulse-ring {
+      0%   { transform: scale(1); opacity: .6; }
+      100% { transform: scale(2.6); opacity: 0; }
+    }
+
+    .active-city {
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+    .active-city-name {
+      font-family: var(--f-d);
+      font-size: clamp(2.6rem, 5.5vw, 4.5rem);
+      font-weight: 800;
+      letter-spacing: -.03em;
+      line-height: 1;
+      color: #fff;
+      clip-path: inset(0 100% 0 0);
+      transition: clip-path 1s cubic-bezier(.22,1,.36,1);
+    }
+    .active-city-name.revealed { clip-path: inset(0 0% 0 0); }
+    .active-city.d1 .active-city-name { transition-delay: .1s; }
+    .active-city.d2 .active-city-name { transition-delay: .25s; }
+
+    .active-city-country {
+      font-size: .78rem;
+      font-weight: 600;
+      color: var(--purple-l);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      opacity: 0;
+      transform: translateX(-8px);
+      transition: opacity .5s ease, transform .5s ease;
+    }
+    .active-city-name.revealed ~ .active-city-country {
+      opacity: 1;
+      transform: translateX(0);
+      transition-delay: .6s;
+    }
+
+    .active-city-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(124,58,237,.15);
+      border: 1px solid rgba(124,58,237,.25);
+      border-radius: 100px;
+      padding: 5px 14px;
+      font-size: .72rem;
+      font-weight: 600;
+      color: var(--purple-l);
+      margin-top: 28px;
+    }
+
+    /* RIGHT — coming soon cities */
+    .cities-future { padding: 0 0 0 48px; }
+    @media(max-width:768px) { .cities-future { padding: 40px 0 0 0; } }
+
+    .future-city {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 0;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+      opacity: 0;
+      transform: translateX(16px);
+      transition: opacity .6s ease, transform .6s ease, border-color .3s;
+    }
+    .future-city:first-child { border-top: 1px solid rgba(255,255,255,.06); }
+    .future-city.revealed { opacity: 1; transform: translateX(0); }
+    .future-city.d1 { transition-delay: .05s; }
+    .future-city.d2 { transition-delay: .12s; }
+    .future-city.d3 { transition-delay: .19s; }
+    .future-city.d4 { transition-delay: .26s; }
+    .future-city.d5 { transition-delay: .33s; }
+    .future-city.d6 { transition-delay: .40s; }
+    .future-city:hover { border-color: rgba(124,58,237,.2); }
+
+    .future-city-left { display: flex; align-items: center; gap: 14px; }
+    .future-city-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.18);
+      flex-shrink: 0;
+      transition: background .3s, border-color .3s;
+    }
+    .future-city:hover .future-city-dot {
+      background: rgba(124,58,237,.4);
+      border-color: rgba(124,58,237,.5);
+    }
+    .future-city-name {
+      font-family: var(--f-d);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: rgba(255,255,255,.35);
+      letter-spacing: -.02em;
+      transition: color .3s;
+    }
+    .future-city:hover .future-city-name { color: rgba(255,255,255,.7); }
+    .future-city-region {
+      font-size: .72rem;
+      color: rgba(255,255,255,.2);
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      transition: color .3s;
+    }
+    .future-city:hover .future-city-region { color: rgba(255,255,255,.45); }
+    .future-city-year {
+      font-size: .72rem;
+      font-weight: 600;
+      color: rgba(255,255,255,.18);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 100px;
+      padding: 4px 12px;
+      transition: background .3s, color .3s, border-color .3s;
+    }
+    .future-city:hover .future-city-year {
+      background: rgba(124,58,237,.1);
+      border-color: rgba(124,58,237,.2);
+      color: var(--purple-l);
+    }
+
+    .cities-footnote {
+      text-align: center;
+      margin-top: 64px;
+      font-size: .82rem;
+      color: rgba(255,255,255,.2);
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ======================
+       RESPONSIVE
+    ====================== */
+    @media(max-width:768px) {
+      .nav-links { display: none; }
+      .sec { padding: 72px 0; }
+      .wl-form { flex-direction: column; }
+      .wl-btn { padding: 13px; }
+      .hero-stats { flex-wrap: wrap; justify-content: center; gap: 16px; padding: 16px 20px; }
+      .hstat-div { display: none; }
+    }
+    @media(max-width:480px) {
+      .footer-top { flex-direction: column; gap: 32px; }
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <div class="container">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">
+        <img src="images/logo-white.png" alt="Coupld">
+      </a>
+      <ul class="nav-links">
+        <li><a href="#how">How it Works</a></li>
+        <li><a href="#matchmaker">The Matchmaker</a></li>
+        <li><a href="#waitlist">Beta</a></li>
+      </ul>
+      <a href="#waitlist" class="nav-cta">
+        <span class="live-dot"></span>
+        Join Waitlist. <span id="nav-spots">153</span>&nbsp;spots left
+      </a>
+    </div>
+  </div>
+</nav>
+
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-parallax" id="hp">
+    <img src="images/hero-solo.png" alt="">
+  </div>
+  <div class="hero-fog"></div>
+  <div class="hero-glow"></div>
+
+  <div class="hero-content">
+    <div class="eyebrow h-ani">
+      <span class="dot"></span>
+      Beta Launching Soon. Limited to 500
+    </div>
+
+    <h1 class="hero-h1 h-ani">
+      One <em>Matchmaker</em>.<br>
+      Zero <em>Swiping</em>.<br>
+      Real <em>Connection</em>.
+    </h1>
+
+    <p class="hero-sub h-ani">
+      For people who are done with swiping. Five curated matches and a matchmaker who guides you from first conversation to first date.
+    </p>
+
+    <div class="hero-btns h-ani">
+      <a href="#waitlist" class="btn-p">
+        Join the Beta Waitlist
+        <svg width="16" height="16" fill="none" viewBox="0 0 16 16">
+          <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+      <a href="#how" class="btn-g">See how it works</a>
+    </div>
+
+    <div class="hero-stats h-ani">
+      <div class="hstat">
+        <div class="hstat-num" id="h-taken">347</div>
+        <div class="hstat-label">Spots Taken</div>
+      </div>
+      <div class="hstat-div"></div>
+      <div class="hstat">
+        <div class="hstat-num g" id="h-remaining">153</div>
+        <div class="hstat-label">Remaining</div>
+      </div>
+      <div class="hstat-div"></div>
+      <div class="hstat">
+        <div class="hstat-num">500</div>
+        <div class="hstat-label">Total Beta</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-mouse"><div class="scroll-pip"></div></div>
+  </div>
+</section>
+
+
+<!-- SCARCITY STRIP -->
+<div class="sstrip">
+  <div class="container">
+    <div class="sstrip-inner">
+      <div class="sstrip-left">
+        <span class="sbadge">Beta Launching Soon</span>
+        <span class="sstrip-text">
+          Beta is limited to <strong>500 users.</strong> <strong id="strip-remaining">153 spots remaining.</strong>
+        </span>
+      </div>
+      <div class="spbar-wrap">
+        <div class="spbar-top">
+          <span id="strip-taken-lbl">347 joined</span>
+          <strong id="strip-pct">69.4%</strong>
+        </div>
+        <div class="spbar-bg">
+          <div class="spbar-fill" id="spbar"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- CITIES -->
+<section class="cities" id="cities">
+  <div class="cities-bg"></div>
+  <div class="cities-glow-l"></div>
+  <div class="cities-glow-r"></div>
+
+  <div class="container">
+    <div class="cities-header">
+      <span class="sec-eyebrow reveal">Where We Launch</span>
+      <h2 class="sec-h reveal d1">Starting in Australia.<br><em>Then the world.</em></h2>
+      <p class="sec-sub reveal d2">Beta is launching in Sydney and Melbourne. London, New York and more are on the horizon.</p>
+    </div>
+
+    <div class="cities-split">
+      <!-- Active cities -->
+      <div class="cities-active">
+        <div class="cities-status-label live reveal">
+          <div class="pulse-wrap">
+            <div class="pulse-core"></div>
+            <div class="pulse-ring"></div>
+            <div class="pulse-ring-2"></div>
+          </div>
+          Beta Launching In
+        </div>
+
+        <div class="active-city d1" data-city>
+          <div class="active-city-name">Sydney</div>
+          <div class="active-city-country">Australia</div>
+        </div>
+        <div class="active-city d2" data-city>
+          <div class="active-city-name">Melbourne</div>
+          <div class="active-city-country">Australia</div>
+        </div>
+
+        <div class="active-city-badge reveal" style="transition-delay:.5s;">
+          <div class="pulse-wrap" style="width:7px;height:7px;">
+            <div class="pulse-core"></div>
+            <div class="pulse-ring"></div>
+          </div>
+          Join the waitlist to be first
+        </div>
+      </div>
+
+      <!-- Divider -->
+      <div class="cities-divider"></div>
+
+      <!-- Future cities -->
+      <div class="cities-future">
+        <div class="cities-status-label soon" style="margin-bottom:28px;">On the Horizon</div>
+
+        <div class="future-city d1" data-future>
+          <div class="future-city-left">
+            <div class="future-city-dot"></div>
+            <div>
+              <div class="future-city-name">London</div>
+              <div class="future-city-region">United Kingdom</div>
+            </div>
+          </div>
+          <div class="future-city-year">2026</div>
+        </div>
+        <div class="future-city d2" data-future>
+          <div class="future-city-left">
+            <div class="future-city-dot"></div>
+            <div>
+              <div class="future-city-name">New York</div>
+              <div class="future-city-region">United States</div>
+            </div>
+          </div>
+          <div class="future-city-year">2026</div>
+        </div>
+        <div class="future-city d3" data-future>
+          <div class="future-city-left">
+            <div class="future-city-dot"></div>
+            <div>
+              <div class="future-city-name">Manchester</div>
+              <div class="future-city-region">United Kingdom</div>
+            </div>
+          </div>
+          <div class="future-city-year">2026</div>
+        </div>
+        <div class="future-city d4" data-future>
+          <div class="future-city-left">
+            <div class="future-city-dot"></div>
+            <div>
+              <div class="future-city-name">Los Angeles</div>
+              <div class="future-city-region">United States</div>
+            </div>
+          </div>
+          <div class="future-city-year">2027</div>
+        </div>
+        <div class="future-city d5" data-future>
+          <div class="future-city-left">
+            <div class="future-city-dot"></div>
+            <div>
+              <div class="future-city-name">Chicago</div>
+              <div class="future-city-region">United States</div>
+            </div>
+          </div>
+          <div class="future-city-year">2027</div>
+        </div>
+        <div class="future-city d6" data-future>
+          <div class="future-city-left">
+            <div class="future-city-dot"></div>
+            <div>
+              <div class="future-city-name">San Francisco</div>
+              <div class="future-city-region">United States</div>
+            </div>
+          </div>
+          <div class="future-city-year">2027</div>
+        </div>
+      </div>
+    </div>
+
+    <p class="cities-footnote reveal">More cities to be announced. Join the waitlist to be first in your city.</p>
+  </div>
+</section>
+
+
+<!-- FEATURES -->
+<section class="features sec" id="features">
+  <div class="container">
+    <div class="features-hd">
+      <span class="sec-eyebrow reveal">What is different</span>
+      <h2 class="sec-h reveal d1">Built around <em>your outcome.</em></h2>
+      <p class="sec-sub reveal d2">
+        Every decision in Coupld starts with one question: does this help you find your person?
+      </p>
+    </div>
+
+    <div class="feat-grid">
+      <div class="fcard reveal d1">
+        <div class="fcard-num">01</div>
+        <div class="fcard-title">Five matches. Not five hundred.</div>
+        <div class="fcard-text">One batch of five deeply compatible people, curated through ongoing profiling. No scrolling. No swiping. No fatigue.</div>
+      </div>
+      <div class="fcard reveal d2">
+        <div class="fcard-num">02</div>
+        <div class="fcard-title">A matchmaker, not a filter</div>
+        <div class="fcard-text">The matchmaker learns who you are through conversation. It gets sharper with every date, debrief and message you send.</div>
+      </div>
+      <div class="fcard reveal d3">
+        <div class="fcard-num">03</div>
+        <div class="fcard-title">Voice, not forms</div>
+        <div class="fcard-text">Your first interaction is a spoken conversation, not a sign-up sheet. Fourteen minutes that replace a hundred checkboxes.</div>
+      </div>
+      <div class="fcard reveal d1">
+        <div class="fcard-num">04</div>
+        <div class="fcard-title">Safety is a feature, not a policy</div>
+        <div class="fcard-text">Identity verification, proactive scam detection and safe check-ins are built into the product. Not buried in the terms.</div>
+      </div>
+      <div class="fcard reveal d2">
+        <div class="fcard-num">05</div>
+        <div class="fcard-title">The app changes when you do</div>
+        <div class="fcard-text">When you go exclusive, Coupld transitions with you. The matchmaker shifts. Billing shifts. Nothing gets deleted.</div>
+      </div>
+      <div class="fcard reveal d3">
+        <div class="fcard-num">06</div>
+        <div class="fcard-title">We succeed when you do</div>
+        <div class="fcard-text">Coupld's success is measured by the same thing as yours: a real relationship. That is the only outcome we build for.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- MARQUEE -->
+<div class="marquee-sec">
+  <div class="mq-track">
+    <span class="mq-item"><span class="mq-dot"></span>Five curated matches</span>
+    <span class="mq-item"><span class="mq-dot"></span>Eight-dimensional profiling</span>
+    <span class="mq-item"><span class="mq-dot"></span>Voice onboarding</span>
+    <span class="mq-item"><span class="mq-dot"></span>Personal matchmaker</span>
+    <span class="mq-item"><span class="mq-dot"></span>Safety by design</span>
+    <span class="mq-item"><span class="mq-dot"></span>Relationship mode</span>
+    <span class="mq-item"><span class="mq-dot"></span>Real dates</span>
+    <span class="mq-item"><span class="mq-dot"></span>No swiping</span>
+    <span class="mq-item"><span class="mq-dot"></span>Post-date debrief</span>
+    <span class="mq-item"><span class="mq-dot"></span>Date planning built in</span>
+    <!-- duplicate for seamless loop -->
+    <span class="mq-item"><span class="mq-dot"></span>Five curated matches</span>
+    <span class="mq-item"><span class="mq-dot"></span>Eight-dimensional profiling</span>
+    <span class="mq-item"><span class="mq-dot"></span>Voice onboarding</span>
+    <span class="mq-item"><span class="mq-dot"></span>Personal matchmaker</span>
+    <span class="mq-item"><span class="mq-dot"></span>Safety by design</span>
+    <span class="mq-item"><span class="mq-dot"></span>Relationship mode</span>
+    <span class="mq-item"><span class="mq-dot"></span>Real dates</span>
+    <span class="mq-item"><span class="mq-dot"></span>No swiping</span>
+    <span class="mq-item"><span class="mq-dot"></span>Post-date debrief</span>
+    <span class="mq-item"><span class="mq-dot"></span>Date planning built in</span>
+  </div>
+</div>
+
+
+<!-- HOW IT WORKS -->
+<section class="sec" id="how">
+  <div class="container">
+    <div class="how-hd">
+      <span class="sec-eyebrow reveal">How it Works</span>
+      <h2 class="sec-h reveal d1">From sign-up to <em>exclusive.</em></h2>
+    </div>
+
+    <div class="how-grid">
+      <div class="hstep reveal d1">
+        <div class="hstep-img">
+          <img src="images/woman-library.png" alt="Age Verify">
+          <div class="hstep-num">01</div>
+        </div>
+        <div class="hstep-body">
+          <div class="hstep-title">Age Verify</div>
+          <div class="hstep-text">Photo ID and a selfie. No under-18s. Safety from the first screen.</div>
+        </div>
+      </div>
+
+      <div class="hstep reveal d2">
+        <div class="hstep-img">
+          <img src="images/woman-subway.png" alt="Voice Onboard">
+          <div class="hstep-num">02</div>
+        </div>
+        <div class="hstep-body">
+          <div class="hstep-title">Voice Onboard</div>
+          <div class="hstep-text">A fourteen-minute voice conversation with your matchmaker. Eight categories. No forms.</div>
+        </div>
+      </div>
+
+      <div class="hstep reveal d3">
+        <div class="hstep-img">
+          <img src="images/couple-diner.png" alt="5 Matches">
+          <div class="hstep-num">03</div>
+        </div>
+        <div class="hstep-body">
+          <div class="hstep-title">Five Matches</div>
+          <div class="hstep-text">Your matchmaker selects five people. Eight-dimensional compatibility. No infinite scroll.</div>
+        </div>
+      </div>
+
+      <div class="hstep reveal d1">
+        <div class="hstep-img">
+          <img src="images/couple-carousel.png" alt="Matchmaker Guides">
+          <div class="hstep-num">04</div>
+        </div>
+        <div class="hstep-body">
+          <div class="hstep-title">Matchmaker Guides</div>
+          <div class="hstep-text">Icebreakers, date suggestions, nudges. Your matchmaker is active, not passive.</div>
+        </div>
+      </div>
+
+      <div class="hstep reveal d2">
+        <div class="hstep-img">
+          <img src="images/couple-food-stall.png" alt="Real Date">
+          <div class="hstep-num">05</div>
+        </div>
+        <div class="hstep-body">
+          <div class="hstep-title">Real Date</div>
+          <div class="hstep-text">The platform pushes toward a real-world meeting. Date booking, venue suggestions, safe check-in.</div>
+        </div>
+      </div>
+
+      <div class="hstep reveal d3">
+        <div class="hstep-img">
+          <img src="images/couple-closeup.png" alt="Go Exclusive">
+          <div class="hstep-num">06</div>
+        </div>
+        <div class="hstep-body">
+          <div class="hstep-title">Go Exclusive</div>
+          <div class="hstep-text">You declare the relationship. Billing transitions. Relationship features activate. You never delete the app.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- PHOTO BREAK -->
+<div class="photo-break">
+  <div class="pb-img" id="pb-img">
+    <img src="images/couple-living-room.png" alt="">
+  </div>
+  <div class="pb-fog"></div>
+  <div class="pb-content">
+    <div class="pb-quote reveal">
+      <p>Five people who could actually be right for you.<br><em>One matchmaker who knows why.</em></p>
+    </div>
+  </div>
+</div>
+
+
+<!-- THE MATCHMAKER -->
+<section class="mm sec" id="matchmaker">
+  <div class="container">
+    <div class="mm-inner">
+      <div class="mm-left">
+        <span class="sec-eyebrow reveal">The AI Matchmaker</span>
+        <h2 class="sec-h reveal d1">Present at <em>every step.</em></h2>
+        <p class="sec-sub reveal d2">
+          Your matchmaker is not a feature you open occasionally. It is active across every stage of the process, learning from each conversation, each date, each debrief.
+        </p>
+        <div class="reveal d3">
+          <a href="#waitlist" class="btn-p" style="display:inline-flex; margin-top:8px;">
+            Get Early Access
+            <svg width="16" height="16" fill="none" viewBox="0 0 16 16">
+              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="mm-grid reveal d2">
+        <div class="mm-card">
+          <div class="mm-card-num">01</div>
+          <div class="mm-card-title">Voice Onboarding</div>
+          <div class="mm-card-text">Eight conversation categories spoken aloud, not typed. Quicker, more honest, more useful than any form.</div>
+        </div>
+        <div class="mm-card">
+          <div class="mm-card-num">02</div>
+          <div class="mm-card-title">Eight-Dimensional Profiling</div>
+          <div class="mm-card-text">Personality. Attachment. Values. Emotional intelligence. Communication. Life vision. Lifestyle. Intimacy.</div>
+        </div>
+        <div class="mm-card">
+          <div class="mm-card-num">03</div>
+          <div class="mm-card-title">Icebreakers and Conversation</div>
+          <div class="mm-card-text">The matchmaker opens the door and keeps things moving. It spots when a conversation goes stale before you do.</div>
+        </div>
+        <div class="mm-card">
+          <div class="mm-card-num">04</div>
+          <div class="mm-card-title">Date Planning</div>
+          <div class="mm-card-text">When you are ready to meet, the matchmaker suggests venues, gifts and experiences. Partners are integrated directly.</div>
+        </div>
+        <div class="mm-card">
+          <div class="mm-card-num">05</div>
+          <div class="mm-card-title">Post-Date Debrief</div>
+          <div class="mm-card-text">After every date you debrief with your matchmaker. What worked, what did not. That feeds back into future matches.</div>
+        </div>
+        <div class="mm-card">
+          <div class="mm-card-num">06</div>
+          <div class="mm-card-title">Relationship Mode</div>
+          <div class="mm-card-text">When you go exclusive, your matchmaker becomes a couples companion. The relationship continues inside the app.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- WAITLIST -->
+<section class="waitlist sec" id="waitlist">
+  <div class="container">
+    <div class="wl-inner">
+      <span class="sec-eyebrow reveal" style="display:block;text-align:center;">Join the Beta</span>
+      <h2 class="sec-h reveal d1" style="text-align:center;">Be one of the first <em>500.</em></h2>
+      <p class="sec-sub reveal d2" style="text-align:center; margin:0 auto 40px;">
+        The beta is strictly limited. Join the waitlist and we will reach out when your spot opens.
+      </p>
+
+      <div class="wl-box reveal d2">
+        <div class="wl-box-label">Beta Spots Remaining</div>
+        <div class="wl-num" id="wl-num">153</div>
+        <div class="wl-sub-label">out of <strong>500</strong> total beta spots</div>
+        <div class="wl-prog">
+          <div class="wl-prog-bar">
+            <div class="wl-prog-fill" id="wl-prog"></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="wl-form-wrap" class="reveal d3">
+        <form class="wl-form" id="wl-form" novalidate>
+          <input
+            type="email"
+            class="wl-input"
+            id="wl-email"
+            placeholder="your@email.com"
+            required
+            autocomplete="email"
+          >
+          <button type="submit" class="wl-btn">Claim My Spot</button>
+        </form>
+        <p class="wl-note">No spam. One email when your spot opens. Unsubscribe anytime.</p>
+      </div>
+
+      <div class="wl-success" id="wl-success">
+        <div class="wl-success-ico">
+          <svg fill="none" viewBox="0 0 24 24" stroke="var(--purple-l)" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+          </svg>
+        </div>
+        <div class="wl-success-title">You are on the list.</div>
+        <div class="wl-success-txt">We will reach out when your spot opens. Spots are going fast.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-top">
+      <div>
+        <div class="footer-logo">
+          <img src="images/logo-white.png" alt="Coupld">
+        </div>
+        <p class="footer-tagline">One Matchmaker. Zero Swiping. Real Connection.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Product</h4>
+        <ul>
+          <li><a href="#how">How it Works</a></li>
+          <li><a href="#matchmaker">The Matchmaker</a></li>
+          <li><a href="#features">What is Different</a></li>
+          <li><a href="#waitlist">Join Beta</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Safety</a></li>
+          <li><a href="#">Press</a></li>
+          <li><a href="#">Careers</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Connect</h4>
+        <ul>
+          <li><a href="#">Instagram</a></li>
+          <li><a href="#">TikTok</a></li>
+          <li><a href="#">LinkedIn</a></li>
+          <li><a href="mailto:hello@coupld.app">hello@coupld.app</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">2026 Coupld. All rights reserved.</span>
+      <div class="footer-legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms</a>
+        <a href="#">Safety</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<script>
+  // NAV SCROLL
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => nav.classList.toggle('stuck', window.scrollY > 48), { passive: true });
+
+  // PARALLAX
+  const heroP  = document.getElementById('hp');
+  const probP  = document.getElementById('prob-img');
+  const pbImgEl = document.getElementById('pb-img');
+
+  function doParallax() {
+    const sy = window.scrollY;
+    if (heroP) heroP.style.transform = `translateY(${sy * 0.32}px)`;
+    if (probP) {
+      const wrap = probP.closest('.problem-img-wrap');
+      if (wrap) probP.style.transform = `translateY(${wrap.getBoundingClientRect().top * 0.18}px)`;
+    }
+    if (pbImgEl) {
+      const wrap = pbImgEl.closest('.photo-break');
+      if (wrap) pbImgEl.style.transform = `translateY(${wrap.getBoundingClientRect().top * 0.18}px)`;
+    }
+  }
+  window.addEventListener('scroll', doParallax, { passive: true });
+  doParallax();
+
+  // BETA COUNTER
+  const TOTAL = 500;
+  let taken     = 347 + Math.floor(Math.random() * 5);
+  let remaining = TOTAL - taken;
+
+  function syncCounters() {
+    const pct = ((taken / TOTAL) * 100).toFixed(1);
+
+    const hTaken = document.getElementById('h-taken');
+    const hRem   = document.getElementById('h-remaining');
+    if (hTaken) hTaken.textContent = taken;
+    if (hRem)   hRem.textContent   = remaining;
+
+    const navSpots = document.getElementById('nav-spots');
+    if (navSpots) navSpots.textContent = remaining;
+
+    const stripRem = document.getElementById('strip-remaining');
+    const stripTkn = document.getElementById('strip-taken-lbl');
+    const stripPct = document.getElementById('strip-pct');
+    const spbar    = document.getElementById('spbar');
+    if (stripRem) stripRem.textContent = `${remaining} spots remaining.`;
+    if (stripTkn) stripTkn.textContent = `${taken} joined`;
+    if (stripPct) stripPct.textContent = `${pct}%`;
+    if (spbar)    spbar.style.width    = `${pct}%`;
+
+    const wlNum  = document.getElementById('wl-num');
+    const wlProg = document.getElementById('wl-prog');
+    if (wlNum) {
+      wlNum.classList.remove('tick');
+      void wlNum.offsetWidth;
+      wlNum.classList.add('tick');
+      wlNum.textContent = remaining;
+    }
+    if (wlProg) wlProg.style.width = `${pct}%`;
+  }
+
+  syncCounters();
+  setTimeout(() => {
+    const pct = (taken / TOTAL) * 100;
+    const spbar = document.getElementById('spbar');
+    const wlProg = document.getElementById('wl-prog');
+    if (spbar)  spbar.style.width  = `${pct}%`;
+    if (wlProg) wlProg.style.width = `${pct}%`;
+  }, 500);
+
+  function scheduleTick() {
+    setTimeout(() => {
+      if (remaining > 6) { taken++; remaining--; syncCounters(); }
+      scheduleTick();
+    }, 28000 + Math.random() * 24000);
+  }
+  scheduleTick();
+
+  // SCROLL REVEAL
+  const revealObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('in'); revealObs.unobserve(e.target); }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+  // WAITLIST FORM
+  const wlForm     = document.getElementById('wl-form');
+  const wlFormWrap = document.getElementById('wl-form-wrap');
+  const wlSuccess  = document.getElementById('wl-success');
+
+  wlForm?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = document.getElementById('wl-email').value.trim();
+    if (!email || !email.includes('@')) return;
+    const btn = wlForm.querySelector('.wl-btn');
+    btn.textContent = 'Securing your spot...';
+    btn.style.opacity = '0.65';
+    btn.disabled = true;
+    setTimeout(() => {
+      wlFormWrap.style.display = 'none';
+      wlSuccess.classList.add('show');
+      if (remaining > 2) { taken++; remaining--; syncCounters(); }
+    }, 1400);
+  });
+
+  // CITIES ANIMATIONS
+  const cityObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      // Active city name reveal
+      const nameEl = e.target.querySelector('.active-city-name');
+      if (nameEl) nameEl.classList.add('revealed');
+      // Future city slide-in
+      e.target.classList.add('revealed');
+      cityObs.unobserve(e.target);
+    });
+  }, { threshold: 0.2 });
+
+  document.querySelectorAll('[data-city]').forEach(el => cityObs.observe(el));
+  document.querySelectorAll('[data-future]').forEach(el => cityObs.observe(el));
+
+  // SMOOTH SCROLL
+  document.querySelectorAll('a[href^="#"]').forEach(link => {
+    link.addEventListener('click', (e) => {
+      const id = link.getAttribute('href').slice(1);
+      if (!id) return;
+      const target = document.getElementById(id);
+      if (target) {
+        e.preventDefault();
+        window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - 72, behavior: 'smooth' });
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
