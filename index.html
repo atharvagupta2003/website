@@ -1826,14 +1826,6 @@
 
   fetchCount();
 
-  function scheduleTick() {
-    setTimeout(() => {
-      if (remaining > 6) { taken++; remaining--; syncCounters(); }
-      scheduleTick();
-    }, 28000 + Math.random() * 24000);
-  }
-  scheduleTick();
-
   // SCROLL REVEAL
   const revealObs = new IntersectionObserver((entries) => {
     entries.forEach(e => {
