@@ -1207,7 +1207,7 @@
       </ul>
       <a href="#waitlist" class="nav-cta">
         <span class="live-dot"></span>
-        Join Waitlist. <span id="nav-spots">153</span>&nbsp;spots left
+        Join Waitlist. <span id="nav-spots"></span>&nbsp;spots left
       </a>
     </div>
   </div>
@@ -1250,12 +1250,12 @@
 
     <div class="hero-stats h-ani">
       <div class="hstat">
-        <div class="hstat-num" id="h-taken">347</div>
+        <div class="hstat-num" id="h-taken"></div>
         <div class="hstat-label">Spots Taken</div>
       </div>
       <div class="hstat-div"></div>
       <div class="hstat">
-        <div class="hstat-num g" id="h-remaining">153</div>
+        <div class="hstat-num g" id="h-remaining"></div>
         <div class="hstat-label">Remaining</div>
       </div>
       <div class="hstat-div"></div>
@@ -1280,13 +1280,13 @@
       <div class="sstrip-left">
         <span class="sbadge">Beta Launching Soon</span>
         <span class="sstrip-text">
-          Beta is limited to <strong>500 users.</strong> <strong id="strip-remaining">153 spots remaining.</strong>
+          Beta is limited to <strong>500 users.</strong> <strong id="strip-remaining"></strong>
         </span>
       </div>
       <div class="spbar-wrap">
         <div class="spbar-top">
-          <span id="strip-taken-lbl">347 joined</span>
-          <strong id="strip-pct">69.4%</strong>
+          <span id="strip-taken-lbl"></span>
+          <strong id="strip-pct"></strong>
         </div>
         <div class="spbar-bg">
           <div class="spbar-fill" id="spbar"></div>
@@ -1652,7 +1652,7 @@
 
       <div class="wl-box reveal d2">
         <div class="wl-box-label">Beta Spots Remaining</div>
-        <div class="wl-num" id="wl-num">153</div>
+        <div class="wl-num" id="wl-num"></div>
         <div class="wl-sub-label">out of <strong>500</strong> total beta spots</div>
         <div class="wl-prog">
           <div class="wl-prog-bar">
@@ -1724,7 +1724,7 @@
           <li><a href="#">Instagram</a></li>
           <li><a href="#">TikTok</a></li>
           <li><a href="#">LinkedIn</a></li>
-          <li><a href="mailto:hello@coupld.app">hello@coupld.app</a></li>
+          <li><a href="mailto:hello@coupld.ai">hello@coupld.ai</a></li>
         </ul>
       </div>
     </div>
@@ -1766,9 +1766,11 @@
   doParallax();
 
   // BETA COUNTER
+  const EDGE_URL = 'https://yosszmgeheimxcowbwvf.supabase.co/functions/v1/waitlist';
   const TOTAL = 500;
-  let taken     = 347 + Math.floor(Math.random() * 5);
-  let remaining = TOTAL - taken;
+
+  let taken     = 0;
+  let remaining = TOTAL;
 
   function syncCounters() {
     const pct = ((taken / TOTAL) * 100).toFixed(1);
@@ -1801,14 +1803,28 @@
     if (wlProg) wlProg.style.width = `${pct}%`;
   }
 
-  syncCounters();
-  setTimeout(() => {
-    const pct = (taken / TOTAL) * 100;
-    const spbar = document.getElementById('spbar');
-    const wlProg = document.getElementById('wl-prog');
-    if (spbar)  spbar.style.width  = `${pct}%`;
-    if (wlProg) wlProg.style.width = `${pct}%`;
-  }, 500);
+  // Load real count from Supabase (SEED + real signups)
+  async function fetchCount() {
+    try {
+      const res  = await fetch(EDGE_URL);
+      const data = await res.json();
+      taken     = data.count ?? 0;
+      remaining = Math.max(0, TOTAL - taken);
+    } catch (_) {
+      taken     = 0;
+      remaining = TOTAL;
+    }
+    syncCounters();
+    setTimeout(() => {
+      const pct = (taken / TOTAL) * 100;
+      const spbar  = document.getElementById('spbar');
+      const wlProg = document.getElementById('wl-prog');
+      if (spbar)  spbar.style.width  = `${pct}%`;
+      if (wlProg) wlProg.style.width = `${pct}%`;
+    }, 500);
+  }
+
+  fetchCount();
 
   function scheduleTick() {
     setTimeout(() => {
@@ -1831,19 +1847,53 @@
   const wlFormWrap = document.getElementById('wl-form-wrap');
   const wlSuccess  = document.getElementById('wl-success');
 
-  wlForm?.addEventListener('submit', (e) => {
+  wlForm?.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const email = document.getElementById('wl-email').value.trim();
-    if (!email || !email.includes('@')) return;
+    const emailInput = document.getElementById('wl-email');
+    const email = emailInput.value.trim();
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      emailInput.focus();
+      return;
+    }
+
     const btn = wlForm.querySelector('.wl-btn');
     btn.textContent = 'Securing your spot...';
     btn.style.opacity = '0.65';
     btn.disabled = true;
-    setTimeout(() => {
+
+    try {
+      const res  = await fetch(EDGE_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json();
+
       wlFormWrap.style.display = 'none';
+
+      const titleEl = wlSuccess.querySelector('.wl-success-title');
+      const txtEl   = wlSuccess.querySelector('.wl-success-txt');
+
+      if (res.status === 409) {
+        titleEl.textContent = 'You are already on the list.';
+        txtEl.textContent   = 'We have your email. We will reach out when your spot opens.';
+      } else if (res.ok) {
+        titleEl.textContent = 'You are on the list.';
+        txtEl.textContent   = 'Check your inbox. A confirmation is on its way. Spots are going fast.';
+        taken     = data.count ?? taken + 1;
+        remaining = Math.max(0, TOTAL - taken);
+        syncCounters();
+      } else {
+        titleEl.textContent = 'Something went wrong.';
+        txtEl.textContent   = 'Please try again or email us at hello@coupld.ai';
+      }
+
       wlSuccess.classList.add('show');
-      if (remaining > 2) { taken++; remaining--; syncCounters(); }
-    }, 1400);
+    } catch (_) {
+      btn.textContent  = 'Claim My Spot';
+      btn.style.opacity = '1';
+      btn.disabled     = false;
+    }
   });
 
   // CITIES ANIMATIONS
