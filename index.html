@@ -174,6 +174,7 @@
     ====================== */
     .hero {
       position: relative;
+      height: 100vh;
       height: 100svh;
       min-height: 680px;
       display: flex;
@@ -1177,16 +1178,69 @@
     /* ======================
        RESPONSIVE
     ====================== */
+
+    /* prevent iOS tap highlight */
+    * { -webkit-tap-highlight-color: transparent; }
+
+
+    /* prevent iOS input zoom (must be ≥16px) */
+    input, button { font-size: 16px; }
+
     @media(max-width:768px) {
       .nav-links { display: none; }
-      .sec { padding: 72px 0; }
-      .wl-form { flex-direction: column; }
-      .wl-btn { padding: 13px; }
+      .nav-cta { font-size: .78rem; padding: 8px 14px; gap: 6px; }
+      .nav-cta .live-dot { display: none; }
+
+      .sec { padding: 64px 0; }
+
+      .hero-content { padding: 70px 20px 0; }
+      .hero-btns { flex-direction: column; align-items: center; }
+      .btn-p, .btn-g { width: 100%; max-width: 320px; justify-content: center; }
+
       .hero-stats { flex-wrap: wrap; justify-content: center; gap: 16px; padding: 16px 20px; }
       .hstat-div { display: none; }
-    }
-    @media(max-width:480px) {
+      .hstat-num { font-size: 1.6rem; }
+
+      .sstrip-inner { flex-direction: column; gap: 16px; }
+      .spbar-wrap { max-width: 100%; width: 100%; }
+
+      .problem-big { font-size: clamp(2.8rem, 14vw, 4rem); }
+      .problem-content { padding: 60px 0; }
+
+      .feat-grid { grid-template-columns: 1fr; gap: 14px; }
+
+      .how-grid { grid-template-columns: 1fr; gap: 16px; }
+      .hstep-img { height: 180px; }
+
+      .mm-inner { grid-template-columns: 1fr; gap: 36px; }
+      .mm-grid { grid-template-columns: 1fr; gap: 12px; }
+
+      .wl-form { flex-direction: column; gap: 10px; }
+      .wl-btn { padding: 14px; width: 100%; }
+      .wl-input { font-size: 16px; } /* prevent iOS zoom */
+      .wl-box { padding: 22px 20px; }
+      .wl-num { font-size: 3.5rem; }
+
+      .cities-active { padding: 0 0 40px 0; }
+      .cities-future { padding: 40px 0 0 0; }
+      .active-city-name { font-size: clamp(2.2rem, 11vw, 3.2rem); }
+
+      .photo-break { height: 360px; }
+
       .footer-top { flex-direction: column; gap: 32px; }
+      .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
+      .footer-legal { justify-content: center; }
+    }
+
+    @media(max-width:480px) {
+      .container { padding: 0 18px; }
+      .nav { padding: 16px 0; }
+      .hero-h1 { font-size: clamp(2.4rem, 11vw, 3.2rem); }
+      .hero-sub { font-size: .9rem; }
+      .sec-h { font-size: clamp(1.7rem, 7vw, 2.4rem); }
+      .wl-inner .sec-h { font-size: clamp(1.7rem, 7vw, 2.2rem); }
+      .pb-quote p { font-size: clamp(1.2rem, 5.5vw, 1.8rem); }
+      .fcard { padding: 20px; }
     }
   </style>
 </head>
@@ -1207,7 +1261,7 @@
       </ul>
       <a href="#waitlist" class="nav-cta">
         <span class="live-dot"></span>
-        Join Waitlist. <span id="nav-spots"></span>&nbsp;spots left
+        Join Waitlist
       </a>
     </div>
   </div>
@@ -1780,9 +1834,6 @@
     if (hTaken) hTaken.textContent = taken;
     if (hRem)   hRem.textContent   = remaining;
 
-    const navSpots = document.getElementById('nav-spots');
-    if (navSpots) navSpots.textContent = remaining;
-
     const stripRem = document.getElementById('strip-remaining');
     const stripTkn = document.getElementById('strip-taken-lbl');
     const stripPct = document.getElementById('strip-pct');
@@ -1831,8 +1882,13 @@
     entries.forEach(e => {
       if (e.isIntersecting) { e.target.classList.add('in'); revealObs.unobserve(e.target); }
     });
-  }, { threshold: 0.1 });
+  }, { threshold: 0, rootMargin: '0px 0px -40px 0px' });
   document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+  // Fallback: reveal everything after 3s in case observer doesn't fire (iOS Safari)
+  setTimeout(() => {
+    document.querySelectorAll('.reveal:not(.in)').forEach(el => el.classList.add('in'));
+  }, 3000);
 
   // WAITLIST FORM
   const wlForm     = document.getElementById('wl-form');
@@ -1892,14 +1948,12 @@
   const cityObs = new IntersectionObserver((entries) => {
     entries.forEach(e => {
       if (!e.isIntersecting) return;
-      // Active city name reveal
       const nameEl = e.target.querySelector('.active-city-name');
       if (nameEl) nameEl.classList.add('revealed');
-      // Future city slide-in
       e.target.classList.add('revealed');
       cityObs.unobserve(e.target);
     });
-  }, { threshold: 0.2 });
+  }, { threshold: 0, rootMargin: '0px 0px -20px 0px' });
 
   document.querySelectorAll('[data-city]').forEach(el => cityObs.observe(el));
   document.querySelectorAll('[data-future]').forEach(el => cityObs.observe(el));
