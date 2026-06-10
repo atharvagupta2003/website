@@ -274,37 +274,6 @@
     }
 
     /* ==============================
-       SCARCITY STRIP
-    ============================== */
-    .sstrip {
-      background: linear-gradient(135deg, rgba(79,70,229,.05), rgba(124,58,237,.05));
-      border-top: 1px solid rgba(124,58,237,.12);
-      border-bottom: 1px solid rgba(124,58,237,.12);
-      padding: 18px 0;
-    }
-    .sstrip-inner {
-      display: flex; align-items: center;
-      justify-content: space-between; gap: 24px; flex-wrap: wrap;
-    }
-    .sstrip-left { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-    .sbadge {
-      background: var(--grad); color: #fff;
-      font-size: .72rem; font-weight: 700;
-      padding: 4px 12px; border-radius: 100px;
-      letter-spacing: .05em; text-transform: uppercase;
-    }
-    .sstrip-text { font-size: .88rem; color: var(--txt-m); }
-    .sstrip-text strong { color: var(--txt); font-weight: 600; }
-    .spbar-wrap { flex: 1; min-width: 180px; max-width: 280px; }
-    .spbar-top { display: flex; justify-content: space-between; font-size: .72rem; color: var(--txt-f); margin-bottom: 6px; }
-    .spbar-top strong { color: var(--purple); }
-    .spbar-bg { height: 5px; background: rgba(0,0,0,.06); border-radius: 3px; overflow: hidden; }
-    .spbar-fill {
-      height: 100%; background: var(--grad); border-radius: 3px;
-      width: 0; transition: width 1.8s cubic-bezier(.22,1,.36,1);
-    }
-
-    /* ==============================
        FEATURES INTRO (full-screen)
     ============================== */
     .sf-intro {
@@ -642,30 +611,6 @@
     .wl-inner { position: relative; z-index: 1; max-width: 580px; margin: 0 auto; text-align: center; }
     .wl-inner .sec-h { margin-bottom: 12px; }
     .wl-inner .sec-sub { margin: 0 auto 40px; }
-    .wl-box {
-      background: #fff; border: 1px solid rgba(124,58,237,.18);
-      border-radius: 22px; padding: 28px 32px; margin-bottom: 32px;
-      position: relative; overflow: hidden;
-      box-shadow: 0 4px 32px rgba(124,58,237,.08);
-    }
-    .wl-box::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0;
-      height: 2px; background: var(--grad);
-    }
-    .wl-box-label { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; color: var(--txt-m); margin-bottom: 10px; }
-    .wl-num {
-      font-family: var(--f-d); font-size: 4.5rem; font-weight: 800;
-      background: var(--grad-t); -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent; background-clip: text;
-      line-height: 1; margin-bottom: 10px;
-    }
-    .wl-num.tick { animation: ctick .28s ease; }
-    @keyframes ctick { 0% { transform: translateY(-10px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
-    .wl-sub-label { font-size: .85rem; color: var(--txt-m); }
-    .wl-sub-label strong { color: var(--txt); }
-    .wl-prog { margin-top: 18px; }
-    .wl-prog-bar { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
-    .wl-prog-fill { height: 100%; background: var(--grad); border-radius: 2px; width: 0; transition: width 2s cubic-bezier(.22,1,.36,1); }
     .wl-form { display: flex; gap: 10px; max-width: 480px; margin: 0 auto 14px; }
     .wl-input {
       flex: 1; background: #fff; border: 1.5px solid var(--border-s);
@@ -742,9 +687,6 @@
       .hero-btns { flex-direction: column; align-items: center; }
       .btn-p, .btn-g { width: 100%; max-width: 320px; justify-content: center; }
 
-      .sstrip-inner { flex-direction: column; gap: 16px; }
-      .spbar-wrap { max-width: 100%; width: 100%; }
-
       .sf-scroll-outer { height: 380vh; }
       .sf-card-text { padding: calc(var(--nav-h) + 28px) 24px 20px; }
       .sf-card-body { max-width: 100%; }
@@ -766,8 +708,6 @@
       .wl-form { flex-direction: column; gap: 10px; }
       .wl-btn { padding: 14px; width: 100%; }
       .wl-input { font-size: 16px; }
-      .wl-box { padding: 22px 20px; }
-      .wl-num { font-size: 3.5rem; }
 
       .footer-top { flex-direction: column; gap: 32px; }
       .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
@@ -854,30 +794,6 @@
     <div class="scroll-mouse"><div class="scroll-pip"></div></div>
   </div>
 </section>
-
-
-<!-- SCARCITY STRIP -->
-<div class="sstrip">
-  <div class="container">
-    <div class="sstrip-inner">
-      <div class="sstrip-left">
-        <span class="sbadge">Launching Soon</span>
-        <span class="sstrip-text">
-          Spots are limited to <strong>500 users.</strong> <strong id="strip-remaining"></strong>
-        </span>
-      </div>
-      <div class="spbar-wrap">
-        <div class="spbar-top">
-          <span id="strip-taken-lbl"></span>
-          <strong id="strip-pct"></strong>
-        </div>
-        <div class="spbar-bg">
-          <div class="spbar-fill" id="spbar"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
 
 
 <!-- FEATURES INTRO (full-screen parallax) -->
@@ -1271,19 +1187,11 @@
   <div class="container">
     <div class="wl-inner">
       <span class="sec-eyebrow reveal" style="display:block;text-align:center;">Join the Journey</span>
-      <h2 class="sec-h reveal d1" style="text-align:center;">Be one of the first <em>500.</em></h2>
+      <h2 class="sec-h reveal d1" style="text-align:center;">Get <em>early access.</em></h2>
       <p class="sec-sub reveal d2" style="text-align:center; margin:0 auto 40px;">
         Join the waitlist and we will reach out when your spot opens.
       </p>
-      <div class="wl-box reveal d2">
-        <div class="wl-box-label">Spots Remaining</div>
-        <div class="wl-num" id="wl-num"></div>
-        <div class="wl-sub-label">out of <strong>500</strong> total spots</div>
-        <div class="wl-prog">
-          <div class="wl-prog-bar"><div class="wl-prog-fill" id="wl-prog"></div></div>
-        </div>
-      </div>
-      <div id="wl-form-wrap" class="reveal d3">
+      <div id="wl-form-wrap" class="reveal d2">
         <form class="wl-form" id="wl-form" novalidate>
           <input type="email" class="wl-input" id="wl-email" placeholder="your@email.com" required autocomplete="email">
           <button type="submit" class="wl-btn">Claim My Spot</button>
@@ -1437,51 +1345,8 @@
     updateStack();
   })();
 
-  // BETA COUNTER
+  // WAITLIST EDGE FUNCTION
   const EDGE_URL = 'https://yosszmgeheimxcowbwvf.supabase.co/functions/v1/waitlist';
-  const TOTAL = 500;
-  let taken = 0, remaining = TOTAL;
-
-  function syncCounters() {
-    const pct = ((taken / TOTAL) * 100).toFixed(1);
-    const stripRem = document.getElementById('strip-remaining');
-    const stripTkn = document.getElementById('strip-taken-lbl');
-    const stripPct = document.getElementById('strip-pct');
-    const spbar    = document.getElementById('spbar');
-    if (stripRem) stripRem.textContent = remaining + ' spots remaining.';
-    if (stripTkn) stripTkn.textContent = taken + ' joined';
-    if (stripPct) stripPct.textContent = pct + '%';
-    if (spbar)    spbar.style.width    = pct + '%';
-    const wlNum  = document.getElementById('wl-num');
-    const wlProg = document.getElementById('wl-prog');
-    if (wlNum) {
-      wlNum.classList.remove('tick');
-      void wlNum.offsetWidth;
-      wlNum.classList.add('tick');
-      wlNum.textContent = remaining;
-    }
-    if (wlProg) wlProg.style.width = pct + '%';
-  }
-
-  async function fetchCount() {
-    try {
-      const res  = await fetch(EDGE_URL);
-      const data = await res.json();
-      taken     = data.count ?? 0;
-      remaining = Math.max(0, TOTAL - taken);
-    } catch (_) {
-      taken = 0; remaining = TOTAL;
-    }
-    syncCounters();
-    setTimeout(() => {
-      const pct = (taken / TOTAL) * 100;
-      const spbar  = document.getElementById('spbar');
-      const wlProg = document.getElementById('wl-prog');
-      if (spbar)  spbar.style.width  = pct + '%';
-      if (wlProg) wlProg.style.width = pct + '%';
-    }, 500);
-  }
-  fetchCount();
 
   // SCROLL REVEAL
   const revealObs = new IntersectionObserver((entries) => {
@@ -1519,10 +1384,7 @@
         txtEl.textContent   = 'We have your email. We will reach out when your spot opens.';
       } else if (res.ok) {
         titleEl.textContent = 'You are on the list.';
-        txtEl.textContent   = 'Check your inbox. A confirmation is on its way. Spots are going fast.';
-        taken     = data.count ?? taken + 1;
-        remaining = Math.max(0, TOTAL - taken);
-        syncCounters();
+        txtEl.textContent   = 'Check your inbox. A confirmation is on its way.';
       } else {
         titleEl.textContent = 'Something went wrong.';
         txtEl.textContent   = 'Please try again or email us at hello@coupld.ai';
