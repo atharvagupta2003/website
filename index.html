@@ -664,6 +664,15 @@
     .wq-find-btn:hover { transform: translateY(-1px); box-shadow: 0 7px 22px var(--glow); }
     .wq-skip { display: block; font-size: .78rem; color: var(--txt-f); cursor: pointer; background: none; border: none; font-family: var(--f-b); transition: color .2s; }
     .wq-skip:hover { color: var(--txt-m); }
+    .wq-result-label { font-size: .7rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--txt-m); margin-bottom: 8px; }
+    .wq-result-name {
+      font-family: var(--f-d); font-size: 1.6rem; font-weight: 800;
+      letter-spacing: -.03em; line-height: 1;
+      background: var(--grad-t); -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent; background-clip: text;
+      margin-bottom: 12px;
+    }
+    .wq-result-desc { font-size: .82rem; color: var(--txt-m); line-height: 1.65; }
 
     /* ==============================
        QUIZ MODAL
@@ -1698,9 +1707,20 @@
     return 'Octopus';
   }
 
+  function qzUpdateTeaser(creature, info) {
+    const teaser = document.getElementById('wl-quiz-teaser');
+    if (!teaser) return;
+    teaser.innerHTML =
+      `<div class="wq-emoji">${info.emoji}</div>` +
+      `<div class="wq-result-label">Your dating creature type</div>` +
+      `<div class="wq-result-name">${info.article} ${creature}</div>` +
+      `<div class="wq-result-desc">${info.desc}</div>`;
+  }
+
   function qzShowResult() {
     const creature = qzComputeCreature();
     const info     = QZ_CREATURES[creature];
+    qzUpdateTeaser(creature, info);
     qzSetScreen(
       `<div class="qz-result-wrap">` +
         `<span class="qz-res-emoji">${info.emoji}</span>` +
