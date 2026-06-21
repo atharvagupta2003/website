@@ -586,6 +586,8 @@
     /* ==============================
        MATCHMAKER
     ============================== */
+    .mm-headline { font-size: clamp(2.4rem, 5.5vw, 4.2rem); margin-bottom: 10px; }
+    .mm-tagline { font-size: 1.05rem; font-weight: 600; color: var(--purple); margin-bottom: 18px; letter-spacing: .01em; }
     .mm { background: var(--bg-s); position: relative; overflow: hidden; }
     .mm-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center; }
     .mm-left .sec-sub { margin-bottom: 28px; }
@@ -720,7 +722,7 @@
     ============================== */
     @media (max-width: 480px) {
       .container { padding: 0 18px; }
-      .hero-h1 { font-size: clamp(2.2rem, 10vw, 3rem); }
+      .hero-h1 { font-size: clamp(1.3rem, 5.5vw, 2rem); }
       .hero-sub { font-size: .9rem; }
       .sec-h { font-size: clamp(1.7rem, 7vw, 2.4rem); }
       .sf-intro .sec-h { font-size: clamp(1.8rem, 8vw, 2.6rem); }
@@ -1134,8 +1136,8 @@
   <div class="container">
     <div class="mm-inner">
       <div class="mm-left">
-        <span class="sec-eyebrow reveal">The AI Matchmaker</span>
-        <h2 class="sec-h reveal d1">Present at <em>every step.</em></h2>
+        <h2 class="sec-h mm-headline reveal">The AI <em>Matchmaker.</em></h2>
+        <p class="mm-tagline reveal d1">Present at every step.</p>
         <p class="sec-sub reveal d2">
           Your matchmaker is not a feature you open occasionally. It is active across every stage of the process, learning from each conversation, each date, each debrief.
         </p>
