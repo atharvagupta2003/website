@@ -605,31 +605,55 @@
     /* ==============================
        WAITLIST
     ============================== */
-    .waitlist { background: var(--bg); position: relative; overflow: hidden; }
+    .waitlist { background: #0D0D1A; position: relative; overflow: hidden; }
     .waitlist::before {
-      content: ''; position: absolute; width: 800px; height: 800px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(124,58,237,.05) 0%, transparent 70%);
+      content: ''; position: absolute; width: 900px; height: 900px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(224,48,112,.07) 0%, transparent 65%);
       left: 50%; top: 50%; transform: translate(-50%,-50%); pointer-events: none;
     }
-    .wl-inner { position: relative; z-index: 1; max-width: 580px; margin: 0 auto; text-align: center; }
+    .wl-inner { position: relative; z-index: 1; max-width: 620px; margin: 0 auto; text-align: center; }
     .wl-inner .sec-h { margin-bottom: 12px; }
     .wl-inner .sec-sub { margin: 0 auto 40px; }
+    .waitlist .sec-eyebrow { color: #E03070; }
+    .waitlist .sec-h { color: #fff; }
+    .waitlist .sec-sub { color: rgba(255,255,255,.6); }
     .wl-form { display: flex; gap: 10px; max-width: 480px; margin: 0 auto 14px; }
     .wl-input {
-      flex: 1; background: #fff; border: 1.5px solid var(--border-s);
+      flex: 1; background: rgba(255,255,255,.08); border: 1.5px solid rgba(255,255,255,.18);
       border-radius: 100px; padding: 13px 22px;
-      font-family: var(--f-b); font-size: .95rem; color: var(--txt);
+      font-family: var(--f-b); font-size: .95rem; color: #fff;
       outline: none; transition: border-color .2s, box-shadow .2s;
     }
-    .wl-input::placeholder { color: var(--txt-f); }
-    .wl-input:focus { border-color: rgba(124,58,237,.5); box-shadow: 0 0 0 3px rgba(124,58,237,.1); }
+    .wl-input::placeholder { color: rgba(255,255,255,.35); }
+    .wl-input:focus { border-color: rgba(255,255,255,.45); box-shadow: 0 0 0 3px rgba(255,255,255,.07); }
     .wl-btn {
-      background: var(--grad); color: #fff; font-weight: 600; font-size: .95rem;
+      background: linear-gradient(135deg, #E03070 0%, #B8205A 100%); color: #fff;
+      font-weight: 600; font-size: .95rem;
       padding: 13px 22px; border-radius: 100px; white-space: nowrap;
-      box-shadow: 0 4px 18px var(--glow); transition: transform .2s, box-shadow .2s;
+      box-shadow: 0 4px 18px rgba(224,48,112,.4); transition: transform .2s, box-shadow .2s;
     }
-    .wl-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 28px var(--glow); }
-    .wl-note { font-size: .76rem; color: var(--txt-f); }
+    .wl-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 28px rgba(224,48,112,.55); }
+    .wl-note { font-size: .76rem; color: rgba(255,255,255,.35); }
+    /* success state on dark bg */
+    .waitlist .wl-success-title { color: #fff; }
+    .waitlist .wl-success-txt { color: rgba(255,255,255,.55); }
+    .waitlist .wl-success-ico { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.15); }
+    .waitlist .wl-quiz-teaser { background: rgba(255,255,255,.07); border-color: rgba(255,255,255,.12); }
+    .waitlist .wq-title { color: #fff; }
+    .waitlist .wq-sub { color: rgba(255,255,255,.55); }
+    .waitlist .wq-result-label { color: rgba(255,255,255,.4); }
+    .waitlist .wq-result-desc { color: rgba(255,255,255,.55); }
+    .waitlist .wq-skip { color: rgba(255,255,255,.4); }
+    .waitlist .wq-skip:hover { color: rgba(255,255,255,.7); }
+    .waitlist .wq-retake { color: #E03070; }
+    /* creature preview */
+    .wl-creatures { margin-top: 56px; }
+    .wl-creatures-label { font-size: .68rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.3); margin-bottom: 20px; }
+    .wl-creatures-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    .wcc { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1); border-radius: 16px; padding: 20px 14px; text-align: center; }
+    .wcc-emoji { font-size: 1.5rem; margin-bottom: 10px; }
+    .wcc-name { font-family: var(--f-d); font-size: .9rem; font-weight: 700; color: #fff; margin-bottom: 6px; }
+    .wcc-desc { font-size: .74rem; color: rgba(255,255,255,.45); line-height: 1.55; }
     .wl-success { display: none; flex-direction: column; align-items: center; gap: 12px; padding: 8px 0; }
     .wl-success.show { display: flex; }
     .wl-success-ico {
@@ -825,6 +849,7 @@
       .wl-form { flex-direction: column; gap: 10px; }
       .wl-btn { padding: 14px; width: 100%; }
       .wl-input { font-size: 16px; }
+      .wl-creatures-grid { grid-template-columns: repeat(2, 1fr); }
 
       .footer-top { flex-direction: column; gap: 32px; }
       .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
@@ -1031,7 +1056,7 @@
 <div class="marquee-sec">
   <div class="mq-track">
     <span class="mq-item"><span class="mq-dot"></span>Five curated matches</span>
-    <span class="mq-item"><span class="mq-dot"></span>Eight-dimensional profiling</span>
+    <span class="mq-item"><span class="mq-dot"></span>Compatibility profile</span>
     <span class="mq-item"><span class="mq-dot"></span>Voice onboarding</span>
     <span class="mq-item"><span class="mq-dot"></span>Personal matchmaker</span>
     <span class="mq-item"><span class="mq-dot"></span>Safety by design</span>
@@ -1041,7 +1066,7 @@
     <span class="mq-item"><span class="mq-dot"></span>Post-date debrief</span>
     <span class="mq-item"><span class="mq-dot"></span>Date planning built in</span>
     <span class="mq-item"><span class="mq-dot"></span>Five curated matches</span>
-    <span class="mq-item"><span class="mq-dot"></span>Eight-dimensional profiling</span>
+    <span class="mq-item"><span class="mq-dot"></span>Compatibility profile</span>
     <span class="mq-item"><span class="mq-dot"></span>Voice onboarding</span>
     <span class="mq-item"><span class="mq-dot"></span>Personal matchmaker</span>
     <span class="mq-item"><span class="mq-dot"></span>Safety by design</span>
@@ -1078,7 +1103,7 @@
         </div>
         <div class="hstep-body">
           <div class="hstep-title">Voice Onboard</div>
-          <div class="hstep-text">A conversation with your matchmaker. Eight categories. No forms.</div>
+          <div class="hstep-text">A conversation with your matchmaker. Your compatibility profile. No forms.</div>
         </div>
       </div>
       <div class="hstep reveal d3">
@@ -1088,7 +1113,7 @@
         </div>
         <div class="hstep-body">
           <div class="hstep-title">Five Matches</div>
-          <div class="hstep-text">Your matchmaker selects five people. Eight-dimensional compatibility. No infinite scroll.</div>
+          <div class="hstep-text">Your matchmaker selects five people. Deep compatibility. No infinite scroll.</div>
         </div>
       </div>
       <div class="hstep reveal d1">
@@ -1270,8 +1295,8 @@
         </div>
         <div class="mm-card">
           <div class="mm-card-num">02</div>
-          <div class="mm-card-title">Eight-Dimensional Profiling</div>
-          <div class="mm-card-text">Personality. Attachment. Values. Emotional intelligence. Communication. Life vision. Lifestyle. Intimacy.</div>
+          <div class="mm-card-title">Compatibility Profile</div>
+          <div class="mm-card-text">Character · Connection · Priorities · Emotion · Communication · Vision · Lifestyle · Attraction</div>
         </div>
         <div class="mm-card">
           <div class="mm-card-num">03</div>
@@ -1303,17 +1328,17 @@
 <section class="waitlist sec" id="waitlist">
   <div class="container">
     <div class="wl-inner">
-      <span class="sec-eyebrow reveal" style="display:block;text-align:center;">Join the Journey</span>
-      <h2 class="sec-h reveal d1" style="text-align:center;">Get <em>early access.</em></h2>
+      <span class="sec-eyebrow reveal" style="display:block;text-align:center;">Are you an Otter or a Seahorse?</span>
+      <h2 class="sec-h reveal d1" style="text-align:center;">Find your <em>kind.</em></h2>
       <p class="sec-sub reveal d2" style="text-align:center; margin:0 auto 40px;">
-        Join the waitlist and we will reach out when your spot opens.
+        Take the 2-minute quiz to reveal your dating creature. We will introduce you to someone who fits, when we open in Sydney and Melbourne.
       </p>
       <div id="wl-form-wrap" class="reveal d2">
         <form class="wl-form" id="wl-form" novalidate>
           <input type="email" class="wl-input" id="wl-email" placeholder="your@email.com" required autocomplete="email">
-          <button type="submit" class="wl-btn">Claim My Spot</button>
+          <button type="submit" class="wl-btn">Reveal My Creature</button>
         </form>
-        <p class="wl-note">No spam. One email when your spot opens. Unsubscribe anytime.</p>
+        <p class="wl-note">Your result and your spot on the list. One email when we open.</p>
       </div>
       <div class="wl-success" id="wl-success">
         <div class="wl-success-ico">
@@ -1329,6 +1354,31 @@
           <div class="wq-sub">Five questions. One slightly-too-accurate result.</div>
           <button class="wq-find-btn" id="wq-find-btn">Find your creature →</button>
           <button class="wq-skip" id="wq-skip-btn">Maybe later</button>
+        </div>
+      </div>
+      <div class="wl-creatures reveal d3">
+        <p class="wl-creatures-label">You might be a...</p>
+        <div class="wl-creatures-grid">
+          <div class="wcc">
+            <div class="wcc-emoji">🌊</div>
+            <div class="wcc-name">Seahorse</div>
+            <div class="wcc-desc">Loyal. Mates for life.</div>
+          </div>
+          <div class="wcc">
+            <div class="wcc-emoji">🦦</div>
+            <div class="wcc-name">Otter</div>
+            <div class="wcc-desc">Holds hands so you do not drift.</div>
+          </div>
+          <div class="wcc">
+            <div class="wcc-emoji">🐧</div>
+            <div class="wcc-name">Penguin</div>
+            <div class="wcc-desc">Proposes with one perfect pebble.</div>
+          </div>
+          <div class="wcc">
+            <div class="wcc-emoji">🐙</div>
+            <div class="wcc-name">Octopus</div>
+            <div class="wcc-desc">Clever. Decides on its own terms.</div>
+          </div>
         </div>
       </div>
     </div>
